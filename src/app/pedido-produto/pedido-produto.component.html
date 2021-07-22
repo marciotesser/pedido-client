@@ -1,0 +1,123 @@
+<p-card header="Produtos">
+  <p-header>
+    <div class="header-buttons">
+      <button
+        (click)="adicionarProduto()"
+        pButton icon="pi pi-plus"
+        label="ADICIONAR PRODUTO"
+        class="p-button-text"
+        [disabled]="pedido.situacao === situacao.FINALIZADO"></button>
+    </div>
+  </p-header>
+  <p-table [value]="pedido.pedidoProdutos">
+    <ng-template let-columns pTemplate="header">
+      <tr>
+        <th>
+          <span>Produto</span>
+        </th>
+        <th>
+          <span>Quantidade</span>
+        </th>
+        <th>
+          <span>Preço</span>
+        </th>
+        <th>
+          <span>Total</span>
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template let-produto pTemplate="body">
+      <tr>
+        <td>
+          <span>{{produto.produto}}</span>
+        </td>
+        <td>
+          <span>{{produto.quantidade}}</span>
+        </td>
+        <td>
+          <span>{{produto.preco | currency:'BRL'}}</span>
+        </td>
+        <td>
+          <span>{{produto.total | currency:'BRL'}}</span>
+        </td>
+        <td style="text-align: right">
+          <button (click)="editarProduto(produto)"
+                  title="Editar" pButton pRipple icon="pi pi-pencil"
+                  class="p-button-rounded p-button-text"
+                  [disabled]="pedido.situacao === situacao.FINALIZADO"></button>
+          <button (click)="excluirProduto(produto)"
+                  title="Excluir" pButton pRipple icon="pi pi-times"
+                  class="p-button-rounded p-button-text p-button-danger"
+                  [disabled]="pedido.situacao === situacao.FINALIZADO"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-card>
+
+<p-dialog [visible]="showCadastroProduto" closable="true" header="Cadastro de Produto">
+  <form id="form" #formProduto="ngForm">
+    <div class="p-fluid">
+      <div class="row">
+        <div class="col-12">
+          <label for="produto">Produto *</label>
+          <input id="produto"
+                 name="produto"
+                 type="text"
+                 pInputText
+                 maxlength="255"
+                 required="true"
+                 [(ngModel)]="pedidoProduto.produto">
+          <small *ngIf="form?.controls?.produto?.errors" class="text-danger d-block mt-2">Campo obrigatório</small>
+        </div>
+        <div class="col-6">
+          <label for="quantidade">Quantidade</label>
+          <input id="quantidade"
+                 name="quantidade"
+                 type="number"
+                 pInputText
+                 (blur)="calculaTotal()"
+                 [(ngModel)]="pedidoProduto.quantidade">
+        </div>
+        <div class="col-6">
+          <label for="preco">Preço</label>
+          <input id="preco"
+                 name="preco"
+                 type="text"
+                 [options]="{allowNegative: false, precision: 2, prefix: 'R$ ', thousands: '.', decimal: ','}"
+                 currencyMask
+                 pInputText
+                 (blur)="calculaTotal()"
+                 [(ngModel)]="pedidoProduto.preco">
+        </div>
+        <div class="col-6">
+          <label for="total">Total</label>
+          <input id="total"
+                 name="total"
+                 type="text"
+                 [options]="{allowNegative: false, precision: 2, prefix: 'R$ ', thousands: '.', decimal: ','}"
+                 readonly="true"
+                 currencyMask
+                 pInputText
+                 [ngModelOptions]="{standalone: true}"
+                 [(ngModel)]="pedidoProduto.total">
+        </div>
+      </div>
+    </div>
+    <div class="col-12" style="text-align: right">
+      <button
+        (click)="salvarProduto()"
+        pButton icon="pi pi-check"
+        label="CONFIRMAR"
+        class="p-button-text"
+        [disabled]="pedido.situacao === situacao.FINALIZADO"></button>
+      <button
+        (click)="showCadastroProduto = false"
+        pButton icon="pi pi-times"
+        label="FECHAR"
+        class="p-button-text p-button-danger"></button>
+    </div>
+  </form>
+</p-dialog>
+

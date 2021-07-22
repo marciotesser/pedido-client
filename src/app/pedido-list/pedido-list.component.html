@@ -1,0 +1,80 @@
+<p-card header="Lista de Pedidos">
+  <p-header>
+    <div class="header-buttons">
+      <button
+          [routerLink]="'/pedido'"
+          pButton icon="pi pi-plus"
+          label="NOVO PEDIDO"
+          class="p-button-text"></button>
+    </div>
+  </p-header>
+  <p-table [value]="pedidos">
+    <ng-template let-columns pTemplate="header">
+      <tr>
+        <th>
+          <span>Número</span>
+        </th>
+        <th>
+          <span>Data</span>
+        </th>
+        <th>
+          <span>Situação</span>
+        </th>
+        <th>
+          <span>Razão Social</span>
+        </th>
+        <th>
+          <span>CNPJ</span>
+        </th>
+        <th>
+          <span>Quant. Produtos</span>
+        </th>
+        <th>
+          <span>Quant. Itens</span>
+        </th>
+        <th>
+          <span>Total Pedido</span>
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template let-pedido pTemplate="body">
+      <tr>
+        <td>
+          <span>{{pedido.id}}</span>
+        </td>
+        <td>
+          <span>{{pedido.data | date:'dd/MM/yyyy'}}</span>
+        </td>
+        <td>
+          <span>{{getSituacao(pedido.situacao)}}</span>
+        </td>
+        <td>
+          <span>{{pedido.razaoSocial}}</span>
+        </td>
+        <td>
+          <span>{{pedido.cnpj}}</span>
+        </td>
+        <td>
+          <span>{{pedido.quantidadeProdutos}}</span>
+        </td>
+        <td>
+          <span>{{pedido.quantidadeItens}}</span>
+        </td>
+        <td>
+          <span>{{pedido.totalPedido | currency:'BRL'}}</span>
+        </td>
+        <td>
+          <button [routerLink]="'/pedido'"
+                  [queryParams]="{'id': pedido.id}"
+                  title="Editar" pButton pRipple icon="pi pi-pencil"
+                  class="p-button-rounded p-button-text"></button>
+          <button (click)="excluirPedido()"
+                  title="Excluir" pButton pRipple icon="pi pi-times"
+                  class="p-button-rounded p-button-text p-button-danger"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-card>
+

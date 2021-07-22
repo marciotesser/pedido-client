@@ -1,0 +1,112 @@
+<form id="form" #form="ngForm">
+  <p-card header="Cadastro de Pedido" >
+    <p-header>
+      <div class="header-buttons">
+        <button
+          [routerLink]="''"
+          pButton icon="pi pi-arrow-left"
+          label="VOLTAR"
+          class="p-button-text"></button>
+        <button
+          (click)="gravarPedido()"
+          pButton icon="pi pi-check"
+          label="GRAVAR"
+          class="p-button-text"
+          [disabled]="pedido.situacao === situacao.FINALIZADO"></button>
+        <button
+          (click)="finalizarPedido()"
+          pButton icon="pi pi-check-square"
+          label="FINALIZAR"
+          class="p-button-text"
+          [disabled]="pedido.situacao === situacao.FINALIZADO"></button>
+      </div>
+    </p-header>
+
+    <div class="p-fluid">
+      <div class="row">
+        <div class="col-md-2 ">
+          <label for="numero">Número</label>
+          <input id="numero"
+                 name="numero"
+                 type="text"
+                 [(ngModel)]="pedido.id"
+                 [ngModelOptions]="{standalone: true}"
+                 readonly="true"
+                 pInputText >
+        </div>
+        <div class="col-md-2">
+          <label for="data">Data *</label>
+          <p-calendar id="data"
+                      name="data"
+                      required
+                      dateFormat="dd/mm/yy"
+                      [(ngModel)]="pedido.data"
+          ></p-calendar>
+          <small *ngIf="formPedido?.controls?.data?.errors" class="text-danger d-block mt-2">Campo obrigatório</small>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-8">
+          <label for="razaoSocial">Razão Social</label>
+          <input id="razaoSocial"
+                 name="razaoSocial"
+                 type="text"
+                 pInputText
+                 maxlength="255"
+                 [(ngModel)]="pedido.razaoSocial">
+        </div>
+        <div class="col-4">
+          <label for="cnpj">CNPJ</label>
+          <p-inputMask id="cnpj"
+                       name="cnpj"
+                       mask="99.999.999/9999-99"
+                       [(ngModel)]="pedido.cnpj"
+                       unmask="true"></p-inputMask>
+        </div>
+        <div class="col-2">
+          <label for="telefone">Telefone</label>
+          <p-inputMask id="telefone"
+                       name="telefone"
+                       mask="(99)9999-9999"
+                       [(ngModel)]="pedido.telefone"
+                       unmask="true"></p-inputMask>
+        </div>
+        <div class="col-10">
+          <label for="email">Email</label>
+          <input id="email"
+                 name="email"
+                 type="email"
+                 pInputText
+                 maxlength="255"
+                 email="true"
+                 [(ngModel)]="pedido.email">
+          <small *ngIf="formPedido?.controls?.email?.errors" class="text-danger d-block mt-2">Email inválido</small>
+        </div>
+      </div>
+    </div>
+
+    <app-pedido-produto [pedido]="pedido" (gravarPedido)="gravarPedido()"></app-pedido-produto>
+
+    <p-card header="Resumo">
+      <div class="row">
+        <div class="col-3" style="text-align: center">
+          <span class="title-resumo">Situação</span><br>
+          <span class="valor-resumo">{{getSituacao(pedido.situacao)}}</span>
+        </div>
+        <div class="col-3" style="text-align: center">
+          <span class="title-resumo">Quant. Produtos</span><br>
+          <span class="valor-resumo">{{pedido.quantidadeProdutos}}</span>
+        </div>
+        <div class="col-3" style="text-align: center">
+          <span class="title-resumo">Quant. Itens</span><br>
+          <span class="valor-resumo">{{pedido.quantidadeItens}}</span>
+        </div>
+        <div class="col-3" style="text-align: center">
+          <span class="title-resumo">Total Pedido</span><br>
+          <span class="valor-resumo">{{pedido.totalPedido | currency: 'BRL'}}</span>
+        </div>
+      </div>
+    </p-card>
+  </p-card>
+</form>
+

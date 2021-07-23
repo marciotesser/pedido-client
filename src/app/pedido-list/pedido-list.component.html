@@ -69,7 +69,8 @@
                   [queryParams]="{'id': pedido.id}"
                   title="Editar" pButton pRipple icon="pi pi-pencil"
                   class="p-button-rounded p-button-text"></button>
-          <button (click)="excluirPedido()"
+          <button (click)="excluirPedido(pedido)"
+                  [disabled]="pedido.situacao === situacao.FINALIZADO"
                   title="Excluir" pButton pRipple icon="pi pi-times"
                   class="p-button-rounded p-button-text p-button-danger"></button>
         </td>

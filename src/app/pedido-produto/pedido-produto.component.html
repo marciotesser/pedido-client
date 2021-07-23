@@ -76,6 +76,7 @@
           <input id="quantidade"
                  name="quantidade"
                  type="number"
+                 min="1"
                  pInputText
                  (blur)="calculaTotal()"
                  [(ngModel)]="pedidoProduto.quantidade">

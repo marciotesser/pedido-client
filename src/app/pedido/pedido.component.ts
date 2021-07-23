@@ -94,11 +94,23 @@ export class PedidoComponent implements OnInit {
   }
 
   finalizarPedido(): void {
-    this.pedidoService.finalizaPedido(this.pedido.id, this.pedido).subscribe(p => {
+    if (this.formPedido.valid) {
+      this.pedidoService.finalizaPedido(this.pedido.id, this.pedido).subscribe(p => {
+        this.pedido = p;
+        this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Pedido Finalizado!'});
+      }, error => {
+        this.messageService.add({severity: 'error', summary: 'Erro', detail: error.error.message.toString()});
+      });
+    } else {
+      this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Para finalizar o pedido, ' +
+          'todos os campos do cabeçalho devem estar preenchidos.'});
+      this.validaForm();
+    }
+  }
+
+  atualizaResumo(): void {
+    this.pedidoService.atualizaResumo(this.pedido).subscribe(p => {
       this.pedido = p;
-      this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Pedido Finalizado!'});
-    }, error => {
-      this.messageService.add({severity: 'error', summary: 'Erro', detail: error.error.message.toString()});
     });
   }
 

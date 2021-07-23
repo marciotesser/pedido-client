@@ -31,7 +31,7 @@
                  type="text"
                  [(ngModel)]="pedido.id"
                  [ngModelOptions]="{standalone: true}"
-                 readonly="true"
+                 readonly
                  pInputText >
         </div>
         <div class="col-md-2">
@@ -47,29 +47,35 @@
       </div>
       <div class="row">
         <div class="col-8">
-          <label for="razaoSocial">Razão Social</label>
+          <label for="razaoSocial">Razão Social *</label>
           <input id="razaoSocial"
                  name="razaoSocial"
                  type="text"
                  pInputText
                  maxlength="255"
+                 required
                  [(ngModel)]="pedido.razaoSocial">
+          <small *ngIf="formPedido?.controls?.razaoSocial?.errors" class="text-danger d-block mt-2">Campo obrigatório</small>
         </div>
         <div class="col-4">
-          <label for="cnpj">CNPJ</label>
+          <label for="cnpj">CNPJ *</label>
           <p-inputMask id="cnpj"
                        name="cnpj"
                        mask="99.999.999/9999-99"
+                       required
                        [(ngModel)]="pedido.cnpj"
                        unmask="true"></p-inputMask>
+          <small *ngIf="formPedido?.controls?.cnpj?.errors" class="text-danger d-block mt-2">Campo obrigatório</small>
         </div>
         <div class="col-2">
           <label for="telefone">Telefone</label>
           <p-inputMask id="telefone"
                        name="telefone"
                        mask="(99)9999-9999"
+                       required
                        [(ngModel)]="pedido.telefone"
                        unmask="true"></p-inputMask>
+          <small *ngIf="formPedido?.controls?.telefone?.errors" class="text-danger d-block mt-2">Campo obrigatório</small>
         </div>
         <div class="col-10">
           <label for="email">Email</label>
@@ -79,13 +85,15 @@
                  pInputText
                  maxlength="255"
                  email="true"
+                 required
                  [(ngModel)]="pedido.email">
+          <small *ngIf="formPedido?.controls?.email?.errors === 'required'" class="text-danger d-block mt-2">Campo obrigatório</small>
           <small *ngIf="formPedido?.controls?.email?.errors" class="text-danger d-block mt-2">Email inválido</small>
         </div>
       </div>
     </div>
 
-    <app-pedido-produto [pedido]="pedido" (gravarPedido)="gravarPedido()"></app-pedido-produto>
+    <app-pedido-produto [pedido]="pedido" (atualizaResumo)="atualizaResumo()"></app-pedido-produto>
 
     <p-card header="Resumo">
       <div class="row">

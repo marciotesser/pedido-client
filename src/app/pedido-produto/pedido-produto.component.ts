@@ -13,7 +13,7 @@ import {Situacao} from '../pedido/situacao';
 export class PedidoProdutoComponent implements OnInit {
 
   @Input() pedido: Pedido;
-  @Output() gravarPedido = new EventEmitter();
+  @Output() atualizaResumo = new EventEmitter();
   @ViewChild('formProduto', {static: false}) form: NgForm;
   showCadastroProduto = false;
   pedidoProduto: PedidoProduto;
@@ -27,7 +27,7 @@ export class PedidoProdutoComponent implements OnInit {
 
   adicionarProduto(): void {
     this.pedidoProduto = new PedidoProduto();
-    this.pedidoProduto.quantidade = 0;
+    this.pedidoProduto.quantidade = 1;
     this.pedidoProduto.preco = 0;
     this.pedidoProduto.total = 0;
     this.showCadastroProduto = true;
@@ -40,10 +40,13 @@ export class PedidoProdutoComponent implements OnInit {
 
   salvarProduto(): void {
     if (this.form.valid) {
-      if (!this.pedidoProduto.id) {
+      const index = this.pedido.pedidoProdutos.indexOf(this.pedidoProduto);
+      if (index !== -1) {
+        this.pedido.pedidoProdutos[index] = this.pedidoProduto;
+      } else {
         this.pedido.pedidoProdutos.push(this.pedidoProduto);
       }
-      this.gravarPedido.emit();
+      this.atualizaResumo.emit();
       this.showCadastroProduto = false;
     } else {
       this.validaForm();
@@ -58,7 +61,7 @@ export class PedidoProdutoComponent implements OnInit {
           rejectLabel: 'Não',
           accept: () => {
             this.pedido.pedidoProdutos = this.pedido.pedidoProdutos.filter(p => p.id !== pedidoProduto.id);
-            this.gravarPedido.emit();
+            this.atualizaResumo.emit();
           }
         });
     }

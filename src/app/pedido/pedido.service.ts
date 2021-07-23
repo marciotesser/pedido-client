@@ -32,6 +32,14 @@ export class PedidoService {
     return this.http.put<Pedido>(this.url + `/finaliza-pedido/${id}`, pedido);
   }
 
+  excluirPedido(id: number): Observable<void> {
+    return this.http.delete<void>(this.url + `/${id}`);
+  }
+
+  atualizaResumo(pedido: Pedido): Observable<Pedido> {
+    return this.http.post<Pedido>(`${this.url}/atualiza-resumo`, pedido);
+  }
+
   getSituacao(situacao: Situacao): string {
     return situacao === Situacao.ABERTO ? 'Aberto' : 'Finalizado';
   }
